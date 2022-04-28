@@ -1,5 +1,6 @@
 import numpy as np
-from gensim.models import Word2Vec, Doc2Vec, FastText
+from gensim.models import Word2Vec, FastText
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from sentence_transformers import SentenceTransformer
 from gensim.models.ldamodel import LdaModel
 from gensim.corpora.dictionary import Dictionary
@@ -24,6 +25,9 @@ class Model:
         self.epochs = epochs
         self.word_vectors = None
         self.x_features = None
+
+        self.dictionary = None
+        self.corpus = None
     
     def vectorize(self, posts, token_list, dimension_output, method=None, min_count=2, window=5):
         """
@@ -67,7 +71,7 @@ class Model:
             doc2vec_array = []
             for i in range(len(model_dbow.dv)):
                 doc2vec_array.append(model_dbow.dv[i])
-            X = np.asrray(doc2vec_array)
+            X = np.asarray(doc2vec_array)
             
             print("doc2vec has finished")
         
@@ -123,17 +127,18 @@ class Model:
         if cluster_method is None:
             cluster_method = KMeans
         
-        if self.method == 'LDA':
-            dictionary = Dictionary(token_list)
-            corpus = [common_dictionary.doc2bow(text) for text in token_list]
-            
+        if not self.dictionary:
+           self.dictionary = Dictionary(token_list)
+           self.corpus = [self.dictionary.doc2bow(text) for text in token_list]
+
+        if self.method == 'LDA':            
             print('Starting and running LDA model')
-            self.LDA_model = LdaModel(corpus=corpus,
-                             id2word=dictionary,
-                             num_topics=self.num_topics, 
-                             random_state=100,
-                             chunksize=1000,
-                             passes=10)
+            self.LDA_model = LdaModel(corpus=self.corpus,
+                                      id2word=self.dictionary,
+                                      num_topics=self.topics, 
+                                      random_state=100,
+                                      chunksize=1000,
+                                      passes=10)
             
             print('LDA model has finished')
         else:
