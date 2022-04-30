@@ -7,6 +7,7 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import pprint
 import matplotlib.colors as mcolors
+from sklearn.cluster import KMeans
 
 def get_topic_words(token_list, labels, k=None):
     """
@@ -51,11 +52,32 @@ def get_coherence(model, token_list, metric='c_v'):
 
 def get_silhouette(model):
     if model.method != 'LDA': # if method is not LDA
+        print("Getting silhouette score...")
         sc = silhouette_score(model.x_features, model.cluster_method.labels_)
         return sc
     else:
         print("not supported by the current model")
         return None
+
+def get_inertia_plot(model):
+    if model.method == 'LDA':
+        print("LDA model does not support this function")
+        return None
+    else:
+        print("Getting plot of inertias...")
+        scores = []
+        n_clusters = range(2, 15, 2)
+        for k in n_clusters:
+            kmeans = KMeans(n_clusters=k)
+            kmeans.fit(model.x_features)
+            scores.append(kmeans.inertia_)
+
+        plt.figure(figsize=(10,10))
+        plt.plot(n_clusters, scores, 'bx-')
+        plt.xlabel('Values of K')
+        plt.ylabel('Inertia')
+        plt.title('The Elbow Method using Inertia')
+        plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + 'inertias.png')
 
 
 def visualize_data(model):
@@ -73,7 +95,7 @@ def visualize_data(model):
 
         plt.figure(figsize=(10,10))
         plt.scatter(clusterable_embedding[:, 0], clusterable_embedding[:, 1], cmap='Spectral')
-        plt.savefig('plots/' + model.method + 'umap_2d_visualization.png')
+        plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + '_umap_2d_visualization.png')
 
 def visualize_clusters(model, labels=None):
     if model.method == 'LDA':
@@ -93,10 +115,11 @@ def visualize_clusters(model, labels=None):
         for i in u_labels:
             plt.scatter(clusterable_embedding[labels == i, 0] , clusterable_embedding[labels == i, 1] , label = i, cmap='Spectral')
         plt.legend()
-        plt.savefig('plots/' + model.method + 'cluster_visualization.png')
+        plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + '_cluster_visualization.png')
 
 def get_word_clouds(model, labels=None, token_sentence=None):
     if model.method == 'LDA':
+        print("Getting wordclouds of clusters...")
         cols = [color for name, color in mcolors.TABLEAU_COLORS.items()]
 
         cloud = WordCloud(background_color='white',
@@ -116,6 +139,7 @@ def get_word_clouds(model, labels=None, token_sentence=None):
 
         print("The wordclouds has been saved in the topics folder")
     else:
+        print("Getting wordclouds of clusters...")
         u_labels = np.unique(labels)
 
         for label_num in u_labels:

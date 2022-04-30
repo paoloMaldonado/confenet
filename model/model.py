@@ -143,6 +143,7 @@ class Model:
             print('LDA model has finished')
         else:
             self.cluster_method = cluster_method(n_clusters=self.topics)
+            
             if 'min_count' in kwargs:
                 self.x_features = self.vectorize(posts, token_list, dimension_output, self.method, kwargs['min_count'])
             elif 'window' in kwargs:
