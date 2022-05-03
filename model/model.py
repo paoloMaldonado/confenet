@@ -5,6 +5,7 @@ from sentence_transformers import SentenceTransformer
 from gensim.models.ldamodel import LdaModel
 from gensim.corpora.dictionary import Dictionary
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import normalize
 
 class Model:
     """
@@ -103,7 +104,7 @@ class Model:
     def get_sentence_vector(self, word_vectors, tokenized_sentence):
         doc = [word for word in tokenized_sentence if word in word_vectors]
         if len(doc) > 0:
-            return np.mean(word_vectors[doc], axis=0) 
+            return np.mean(normalize(word_vectors[doc]), axis=0)  # normalize vector before averaging
         else:
             return None
     
@@ -145,9 +146,9 @@ class Model:
             self.cluster_method = cluster_method(n_clusters=self.topics)
             
             if 'min_count' in kwargs:
-                self.x_features = self.vectorize(posts, token_list, dimension_output, self.method, kwargs['min_count'])
+                self.x_features = self.vectorize(posts, token_list, dimension_output, self.method, min_count=kwargs['min_count'])
             elif 'window' in kwargs:
-                self.x_features = self.vectorize(posts, token_list, dimension_output, self.method, kwargs['window'])
+                self.x_features = self.vectorize(posts, token_list, dimension_output, self.method, window=kwargs['window'])
             else:
                 self.x_features = self.vectorize(posts, token_list, dimension_output, self.method)
 

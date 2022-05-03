@@ -123,13 +123,14 @@ def get_word_clouds(model, labels=None, token_sentence=None):
         cols = [color for name, color in mcolors.TABLEAU_COLORS.items()]
 
         cloud = WordCloud(background_color='white',
-                          max_words=15,
+                          max_words=100,
                           colormap='tab10',
                           prefer_horizontal=1.0)
 
-        topics = model.LDA_model.show_topics(num_words=15, formatted=False)
-
-        for label, _ in topics:
+        topics = model.LDA_model.show_topics(num_topics=model.topics ,num_words=100, formatted=False)
+        
+        print("Generating wordclouds...")
+        for label, _ in enumerate(topics):
             plt.figure()
             topic_words = dict(topics[label][1])
             cloud.generate_from_frequencies(topic_words, max_font_size=300)
