@@ -11,16 +11,15 @@ if __name__ == "__main__":
     df = pd.read_pickle('data/confesiones_allclean_new.df')
     data = list(df.no_stopwords)
 
-    model = Model(topics=12, method='LDA', epochs=30)
+    model = Model(topics=9, method='mpnet', epochs=30)
     model.fit(posts=df.post_clean, token_list=data, dimension_output=500)
 
-    #print("Sillohuette: ", get_silhouette(model))
+    print("Sillohuette: ", get_silhouette(model))
     print("Coherence:", get_coherence(model, data, metric='c_v'))
-    print("Coherence:", get_coherence(model, data, metric='u_mass'))
 
-    visualize_clusters(model)
-    get_word_clouds(model, token_sentence=df.token_sentence)
-    #get_inertia_plot(model)
+    visualize_clusters(model, labels=model.cluster_method.labels_)
+    get_word_clouds(model, labels=model.cluster_method.labels_, token_sentence=df.token_sentence)
+    get_inertia_plot(model)
 
     # docs = pd.DataFrame({'Document': df.token_sentence, 'Class': model.cluster_method.labels_})
     # docs_per_class = docs.groupby(['Class'], as_index=False).agg({'Document': ' '.join})
