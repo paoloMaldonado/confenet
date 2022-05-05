@@ -5,21 +5,24 @@ from model.utils import *
 from model.ctf_idf import *
 import pprint
 from sklearn.feature_extraction.text import CountVectorizer
+from gensim.models import KeyedVectors
 
 #### main ####
 if __name__ == "__main__":
     df = pd.read_pickle('data/confesiones_allclean_new.df')
     data = list(df.no_stopwords)
 
-    model = Model(topics=9, method='mpnet', epochs=30)
-    model.fit(posts=df.post_clean, token_list=data, dimension_output=500)
+    model = Model(topics=9, method='doc2vec', epochs=30)
+    model.fit(posts=df.post_clean, token_list=data, dimension_output=3000, min_count=3)
 
-    print("Sillohuette: ", get_silhouette(model))
-    print("Coherence:", get_coherence(model, data, metric='c_v'))
+    model.save()
 
-    visualize_clusters(model, labels=model.cluster_method.labels_)
-    get_word_clouds(model, labels=model.cluster_method.labels_, token_sentence=df.token_sentence)
-    get_inertia_plot(model)
+    # print("Sillohuette: ", get_silhouette(model))
+    # print("Coherence:", get_coherence(model, data, metric='c_v'))
+
+    # visualize_clusters(model, labels=model.cluster_method.labels_)
+    # get_word_clouds(model, labels=model.cluster_method.labels_, token_sentence=df.token_sentence)
+    # get_inertia_plot(model)
 
     # docs = pd.DataFrame({'Document': df.token_sentence, 'Class': model.cluster_method.labels_})
     # docs_per_class = docs.groupby(['Class'], as_index=False).agg({'Document': ' '.join})

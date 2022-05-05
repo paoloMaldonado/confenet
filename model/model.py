@@ -6,6 +6,7 @@ from gensim.models.ldamodel import LdaModel
 from gensim.corpora.dictionary import Dictionary
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
+from gensim.models import KeyedVectors
 
 class Model:
     """
@@ -25,10 +26,13 @@ class Model:
         
         self.epochs = epochs
         self.word_vectors = None
+        self.doc_vectors = None
         self.x_features = None
 
         self.dictionary = None
         self.corpus = None
+
+        self.is_loaded = False
     
     def vectorize(self, posts, token_list, dimension_output, method=None, min_count=2, window=5):
         """
@@ -69,6 +73,8 @@ class Model:
             print("doc2vec vectorizer is already running")
             model_dbow.train(documents, total_examples=model_dbow.corpus_count, epochs=model_dbow.epochs)
             
+            self.doc_vectors = model_dbow
+
             doc2vec_array = []
             for i in range(len(model_dbow.dv)):
                 doc2vec_array.append(model_dbow.dv[i])
@@ -155,3 +161,59 @@ class Model:
             print('Starting Clustering')
             self.cluster_method.fit(self.x_features)
             print('Clustering Done!')
+
+    def save(self):
+        if self.method == 'doc2vec':
+            print("Saving doc2vec model...")
+            self.doc_vectors.save("doc2vec_confesionesPeru.docvectors")
+            del self.doc_vectors
+            print("Model saved...")
+
+        elif self.method == 'LDA':
+            print("LDA")
+
+        elif self.method == 'mpnet':
+            print("mpnet is already a pretrained model")
+
+        elif self.method == 'word2vec':
+            print("Saving word2vec model...")
+            self.word_vectors.save("word2vec_confesionesPeru.wordvectors")
+            print("Model saved...")
+
+        elif self.method == 'fasttext':
+            print("Saving fasttext model...")
+            self.word_vectors.save("fasttext_confesionesPeru.wordvectors")
+            print("Model saved...")
+
+        else:
+            print("Unknown model")
+
+    
+    def load(self, model_path, method):
+        if method == 'doc2vec':
+            model_d2v = Doc2Vec.load(model_path)
+            self.doc_vectors = model_d2v
+            self.method = method
+            self.is_loaded = True
+            print("Loaded doc2vec model...")
+
+        elif method == 'LDA':
+            print("LDA")
+
+        elif method == 'mpnet':
+            print("mpnet is already a pretrained model")
+
+        elif method == 'word2vec':
+            wv = KeyedVectors.load(model_path, mmap='r')
+            self.word_vectors = wv
+            self.method = method
+            self.is_loaded = True
+            print("Loaded word2vec model...")
+        
+        elif method == 'fasttext':
+            wv = KeyedVectors.load(model_path, mmap='r')
+            self.word_vectors = wv
+            self.method = method
+            self.is_loaded = True
+            print("Loaded fasttext model...")
+
