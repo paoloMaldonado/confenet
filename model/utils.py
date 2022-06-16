@@ -164,8 +164,9 @@ def visualize_clusters(model, labels=None):
     else:
         clusterable_embedding = model.x_features
         centroids = np.array(model.cluster_method.cluster_centers_)
-        
-        if model.project_features == False:
+
+        if clusterable_embedding.shape[1] > 2:
+            print("plotting...")
             # project the features into a 2-dimensional space
             pca = PCA(2, random_state=10)
             clusterable_embedding = pca.fit_transform(clusterable_embedding)
