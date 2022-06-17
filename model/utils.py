@@ -6,11 +6,9 @@ import pandas as pd
 from collections import Counter
 from gensim.models import CoherenceModel
 from sklearn.metrics import silhouette_score
-import umap
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import pprint
 import matplotlib.colors as mcolors
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import CountVectorizer
