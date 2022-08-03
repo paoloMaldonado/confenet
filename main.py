@@ -21,7 +21,7 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--topics", default=4, type=int)
     parser.add_argument("--dimension-output", default=300, type=int)
     parser.add_argument("--vectorizer-path", default = "pretrained/word2vec/word2vec_confesionesPeru.wordvectors", help= "path/to/vectorizer")
-    parser.add_argument("--reduction-method", choices=["pca", "boew", None], default="pca")
+    parser.add_argument("--reduction-method", choices=["pca", "boew", "None"], default="pca")
     parser.add_argument("--boew-vectorizer", choices=["word2vec", "fasttext"], default="word2vec")
     parser.add_argument("--num-components", default=18, type=int)
     parser.add_argument("--boew-pretrained", default = "pretrained/word2vec/word2vec_confesionesPeru.wordvectors")
@@ -33,6 +33,7 @@ if __name__ == "__main__":
     parser.add_argument("--plot-keyword", action="store_true")
     parser.add_argument("--plot-inertia", action="store_true")
     parser.add_argument("--plot-clusters", action="store_true")
+    parser.add_argument("--plot-clusters-3d", action="store_true")
     parser.add_argument("--get-word-clouds", action="store_true")
     parser.add_argument("--get-coherence-metrics", action="store_true")
 
@@ -58,6 +59,9 @@ if __name__ == "__main__":
     # load the data
     df = pd.read_pickle(path_to_data)
     data = list(df.no_stopwords)
+
+    if reduction_method == "None":
+        reduction_method = None
 
     #print(args)
 
@@ -87,6 +91,10 @@ if __name__ == "__main__":
     ### visualize clusters
     if args["plot_clusters"]:
         visualize_clusters(model, labels=model.cluster_method.labels_)
+
+    ### visualize 3D clusters
+    if args["plot_clusters_3d"]:
+        visualize_clusters_3D(model, labels=model.cluster_method.labels_)
 
     ### disable c-tfidf
     use_c_tfidf = True

@@ -175,7 +175,7 @@ def visualize_clusters(model, labels=None):
         for i in u_labels:
             plt.scatter(clusterable_embedding[labels == i, 0] , clusterable_embedding[labels == i, 1] , label = i, cmap='Spectral')
             
-        plt.scatter(centroids[:,0], centroids[:,1], s = 80, marker='+', color = 'k')
+        #plt.scatter(centroids[:,0], centroids[:,1], s = 80, marker='+', color = 'k')
     
         plt.legend()
         plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + '_cluster_visualization.png')
