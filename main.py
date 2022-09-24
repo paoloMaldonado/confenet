@@ -27,10 +27,10 @@ if __name__ == "__main__":
     parser.add_argument("--boew-pretrained", default = "pretrained/word2vec/word2vec_confesionesPeru.wordvectors")
 
     # Adding optional arguments for additional functionality
-    parser.add_argument("--get-topics", default=10, type=int)
+    parser.add_argument("--get-topics", type=int)
     parser.add_argument("--disable-c-tfidf", action="store_true")
     parser.add_argument("--silhouette", action="store_true")
-    parser.add_argument("--plot-keyword", action="store_true")
+    parser.add_argument("--plot-keyword", nargs='+', default=[])
     parser.add_argument("--plot-inertia", action="store_true")
     parser.add_argument("--plot-clusters", action="store_true")
     parser.add_argument("--plot-clusters-3d", action="store_true")
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     words_per_topic = args["get_topics"] 
 
     # matplotlib style
-    plt.style.use("seaborn")
+    plt.style.use("seaborn-white")
 
     # load the data
     df = pd.read_pickle(path_to_data)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     ### plot keywords
     if args["plot_keyword"]:
-        plot_keyword(model, df, "politica")
+        plot_keyword(model, df, args["plot_keyword"])
 
     ### silhouette
     if args["silhouette"]:
@@ -177,23 +177,6 @@ if __name__ == "__main__":
     # plt.figure(figsize=(10,10))
     # plt.plot(range(4, 14+1), scores, 'bx-')
     # plt.plot(range(4, 14+1, 2), scores_even, 'rx-')
-    # plt.xlabel('Values of K')
-    # plt.ylabel('CV Coherence score')
-    # plt.title('Coherence versus number of topics')
-    # plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + 'cv_coherence.png')
-
-
-    ## LDA Experiment ###
-    # scores = []
-    # for t in range(2, 20+1, 2):
-    #     model = Model(topics=t, method='LDA')
-    #     model.fit(posts=df.post_clean, token_list=data)
-    #     scores.append(get_coherence(model, token_list=data, token_sentence=df.token_sentence))
-
-
-    # plt.figure(figsize=(10,10))
-    # plt.plot(range(2, 20+1, 2), scores, 'bx-')
-    # plt.xticks(np.arange(2, 20+1, step=2))
     # plt.xlabel('Values of K')
     # plt.ylabel('CV Coherence score')
     # plt.title('Coherence versus number of topics')

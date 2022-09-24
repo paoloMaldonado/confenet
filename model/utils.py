@@ -121,12 +121,12 @@ def get_inertia_plot(model):
             kmeans.fit(model.x_features)
             scores.append(kmeans.inertia_)
 
-        plt.figure(figsize=(10,10))
+        plt.figure(figsize=(8,4))
         plt.plot(n_clusters, scores, 'bx-')
-        plt.xlabel('Values of K')
-        plt.ylabel('Inertia')
-        plt.title('The Elbow Method using Inertia')
-        plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + 'inertias.png')
+        plt.xlabel('Valores de K')
+        plt.ylabel('Inertias')
+        plt.title('El método Elbow usando inertias')
+        plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + 'inertias.eps')
 
 
 # def visualize_data(model):
@@ -171,13 +171,19 @@ def visualize_clusters(model, labels=None):
             centroids = pca.fit_transform(centroids)
 
         u_labels = np.unique(labels)
-        plt.figure(figsize=(10,10))
+        fig, ax = plt.subplots(figsize=(5,5))
         for i in u_labels:
-            plt.scatter(clusterable_embedding[labels == i, 0] , clusterable_embedding[labels == i, 1] , label = i, cmap='Spectral')
-            
+            ax.scatter(clusterable_embedding[labels == i, 0] , clusterable_embedding[labels == i, 1] , label = i, cmap='Spectral')
+        
+        #ax.set_title(model.method + ' Cluster')
+        # ax.spines.right.set_visible(False)
+        # ax.spines.top.set_visible(False)
+        # ax.spines.left.set_visible(False)
+        # ax.spines.bottom.set_visible(False)
+
+        ax.axes.xaxis.set_visible(False)
+        ax.axes.yaxis.set_visible(False)
         #plt.scatter(centroids[:,0], centroids[:,1], s = 80, marker='+', color = 'k')
-    
-        plt.legend()
         plt.savefig('plots/' + model.method + '_' + str(model.topics) + '_topics_' + '_cluster_visualization.png')
 
 
