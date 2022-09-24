@@ -1,5 +1,5 @@
-# Confenet: Topic identification of undergraduate confessions communities on Facebook
-This is the repository of Confenet, a research project that uses text embedding algorithms and clustering techniques to find relevant topics among student's confessions communities on Facebook
+# Natural Language Processing Techniques for Behavior Analysis in Social Networks of Hispanic American University Communities
+Repository of our research project that uses text embedding algorithms and clustering techniques to find relevant topics among student's confessions communities on Facebook and Instagram. Data are available for any research or academic purposes in the dataset folder. 
 
 ### Example usage
 Run the model and print 10 words per topic: 
