@@ -2,7 +2,7 @@
 Repository of our research project that uses text embedding algorithms and clustering techniques to find relevant topics among student's confessions communities on Facebook and Instagram. Data are available for any research or academic purposes in the *complete_dataset* folder. 
 
 ### Example usage
-Run the model and print 10 words per topic: 
+Run the model and print the top 10 words per topic: 
 ```sh
 python main.py --get-topics 10 
 ```
