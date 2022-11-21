@@ -2,7 +2,7 @@
 Repository of our research project that uses text embedding algorithms and clustering techniques to find relevant topics among student's confessions communities on Facebook and Instagram. Data are available for any research or academic purposes in the *complete_dataset* folder. 
 
 ### Example usage
-Run the model and print 10 words per topic: 
+Run the model and print the top 10 words per topic: 
 ```sh
 python main.py --get-topics 10 
 ```
@@ -33,7 +33,7 @@ Additionally, the code provides optional console parameters for getting specific
 | ```--get-topics``` | print the specified number of words per topic |
 | ```--disable-c-tfidf``` | disable c-tf*idf |
 | ```--silhouette``` | print the silhouette score of the model |
-| ```--plot-keyword``` | get a bar plot of the frequency of a specific keyword across each topic |
+| ```--plot-keyword``` | get a bar plot of the frequency of a keywords (separated by comma) across each topic |
 | ```--plot-inertia``` | get a inertia plot of the model |
 | ```--plot-clusters``` | get a 2D plot of the clusters  |
 | ```--get-word-clouds``` | get a plot of the wordclouds for each cluster |
